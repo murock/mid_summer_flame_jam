@@ -4,6 +4,7 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
+import 'package:wildlife_garden_simulator/constants.dart';
 import 'package:wildlife_garden_simulator/sprite_components/box.dart';
 import 'package:wildlife_garden_simulator/sprite_components/player.dart';
 
@@ -12,9 +13,19 @@ class MainGame extends FlameGame
   late final Player player;
   late final Box box;
 
+  // @override
+  // Color backgroundColor() {
+  //   // TODO: implement backgroundColor
+  //   return Colors.red;
+  // }
+
   @override
   Future<void>? onLoad() async {
-    debugMode = true;
+    //  debugMode = true;
+    camera.viewport = FixedResolutionViewport(Vector2(
+      Constants.resolutionX,
+      Constants.resolutionY,
+    ));
     player = Player(
       position: size / 2,
       size: Vector2.all(100),

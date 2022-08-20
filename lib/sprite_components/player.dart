@@ -2,6 +2,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
+import 'package:wildlife_garden_simulator/constants.dart';
 import 'package:wildlife_garden_simulator/sprite_components/box.dart';
 
 enum PlayerState {
@@ -20,7 +21,7 @@ class Player extends SpriteAnimationGroupComponent
 
   bool onTarget = false;
 
-  static const speed = 200;
+  static const speed = 600;
   static final Vector2 objSize = Vector2.all(50);
   Rect _toRect() => position.toPositionedRect(objSize);
 
@@ -86,6 +87,18 @@ class Player extends SpriteAnimationGroupComponent
       if (!onTarget) {
         final dir = (target - position).normalized();
         position += dir * (speed * dt);
+      }
+
+      if (position.y < 0) {
+        position.y = 0;
+      } else if (position.y > Constants.resolutionY) {
+        position.y = Constants.resolutionY;
+      }
+
+      if (position.x < 0) {
+        position.x = 0;
+      } else if (position.x > Constants.resolutionX) {
+        position.x = Constants.resolutionX;
       }
     }
   }

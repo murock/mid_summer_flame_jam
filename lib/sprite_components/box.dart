@@ -13,7 +13,7 @@ class Box extends SpriteComponent {
         );
   @override
   Future<void>? onLoad() async {
-    sprite = Sprite(await Flame.images.load('static/nine-box.png'));
+    sprite = Sprite(await Flame.images.load('static/3_stages_plant.png'));
     //paint = BasicPalette.green.paint();
     //setPaint(, paint)
     RectangleHitbox hitbox = RectangleHitbox.relative(
