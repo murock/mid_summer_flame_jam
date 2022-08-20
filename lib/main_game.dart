@@ -1,7 +1,7 @@
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
-=import 'package:flutter/services.dart';
+import 'package:flutter/services.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
@@ -67,17 +67,17 @@ class Seed extends Component {
 }
 
 class MainGame extends FlameGame
-    with MouseMovementDetector, HasCollisionDetection, KeyboardEvents, HasTappables {
+    with
+        MouseMovementDetector,
+        HasCollisionDetection,
+        KeyboardEvents,
+        HasTappables {
   late final Player player;
   late final Box box;
   late final Grid grid;
 
-
-  // @override
-  // Color backgroundColor() {
-  //   // TODO: implement backgroundColor
-  //   return Colors.red;
-  // }
+//delete later
+  bool stopMoving = false;
 
   KeyEventResult onKeyEvent(
     RawKeyEvent event,
@@ -91,13 +91,20 @@ class MainGame extends FlameGame
       grid.changeColor(Colors.blue);
       return KeyEventResult.handled;
     }
+
+    // test code delete later
+    final isX = keysPressed.contains(LogicalKeyboardKey.keyX);
+    if (isX && isKeyDown) {
+      stopMoving = true;
+    } else {
+      stopMoving = false;
+    }
+
     return KeyEventResult.ignored;
   }
 
-
   @override
   Future<void>? onLoad() async {
-    debugMode = true;
     camera.viewport = FixedResolutionViewport(Vector2(
       Constants.resolutionX,
       Constants.resolutionY,
@@ -119,6 +126,6 @@ class MainGame extends FlameGame
 
   @override
   void onMouseMove(PointerHoverInfo info) {
-    player.onMouseMove(info);
+    if (!stopMoving) player.onMouseMove(info);
   }
 }

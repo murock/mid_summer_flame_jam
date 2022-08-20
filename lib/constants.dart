@@ -1,6 +1,7 @@
 class Constants {
   static double resolutionY = 1080;
   static double resolutionX = 1920;
+  static double maxInteractDistance = 175;
 }
 
 const grid =
