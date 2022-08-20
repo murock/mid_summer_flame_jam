@@ -1,27 +1,18 @@
-import 'package:flame/extensions.dart';
-import 'package:flame/flame.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
-import 'package:flame/palette.dart';
-import 'package:flutter/material.dart';
 import 'package:wildlife_garden_simulator/constants.dart';
 import 'package:wildlife_garden_simulator/sprite_components/box.dart';
 import 'package:wildlife_garden_simulator/sprite_components/player.dart';
 
 class MainGame extends FlameGame
-    with MouseMovementDetector, HasCollisionDetection {
+    with MouseMovementDetector, HasCollisionDetection, HasTappables {
   late final Player player;
   late final Box box;
 
-  // @override
-  // Color backgroundColor() {
-  //   // TODO: implement backgroundColor
-  //   return Colors.red;
-  // }
-
   @override
   Future<void>? onLoad() async {
-    //  debugMode = true;
+    debugMode = true;
     camera.viewport = FixedResolutionViewport(Vector2(
       Constants.resolutionX,
       Constants.resolutionY,
