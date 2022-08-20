@@ -57,6 +57,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.1"
+  equatable:
+    dependency: transitive
+    description:
+      name: equatable
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.5"
   fake_async:
     dependency: transitive
     description:
@@ -78,6 +85,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.1"
+  flame_mini_sprite:
+    dependency: "direct main"
+    description:
+      name: flame_mini_sprite
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -124,6 +138,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.0"
+  mini_sprite:
+    dependency: "direct main"
+    description:
+      name: mini_sprite
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1"
   ordered_set:
     dependency: transitive
     description:
