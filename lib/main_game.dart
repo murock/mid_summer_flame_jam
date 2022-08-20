@@ -1,8 +1,7 @@
-import 'package:flame/extensions.dart';
-import 'package:flame/flame.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
-import 'package:flutter/services.dart';
+=import 'package:flutter/services.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
@@ -68,10 +67,11 @@ class Seed extends Component {
 }
 
 class MainGame extends FlameGame
-    with MouseMovementDetector, HasCollisionDetection, KeyboardEvents {
+    with MouseMovementDetector, HasCollisionDetection, KeyboardEvents, HasTappables {
   late final Player player;
   late final Box box;
   late final Grid grid;
+
 
   // @override
   // Color backgroundColor() {
@@ -94,9 +94,10 @@ class MainGame extends FlameGame
     return KeyEventResult.ignored;
   }
 
+
   @override
   Future<void>? onLoad() async {
-    //  debugMode = true;
+    debugMode = true;
     camera.viewport = FixedResolutionViewport(Vector2(
       Constants.resolutionX,
       Constants.resolutionY,

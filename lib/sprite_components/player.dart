@@ -59,7 +59,7 @@ class Player extends SpriteAnimationGroupComponent
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
-    if (other is Box) {
+    if (other is Box && other.isTouching) {
       if (intersectionPoints.length == 2) {
         // Calculate the collision normal and separation distance.
         final mid = (intersectionPoints.elementAt(0) +
