@@ -1,12 +1,15 @@
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
+import 'package:wildlife_garden_simulator/sprite_components/box.dart';
 
 enum PlayerState {
   idle,
 }
 
-class Player extends SpriteAnimationGroupComponent with HasGameRef {
+class Player extends SpriteAnimationGroupComponent
+    with CollisionCallbacks, HasGameRef {
   Player({super.position, Vector2? size, super.priority})
       : super(
           size: size ?? Vector2.all(50),
@@ -27,6 +30,14 @@ class Player extends SpriteAnimationGroupComponent with HasGameRef {
 
   @override
   Future<void>? onLoad() async {
+    // RectangleHitbox hitbox = RectangleHitbox.relative(
+    //   Vector2.all(1),
+    //   position: Vector2.all(0),
+    //   parentSize: size,
+    // );
+    // add(hitbox);
+    add(CircleHitbox());
+
     final idle = await gameRef.loadSpriteAnimation(
       'animations/ember.png',
       SpriteAnimationData.sequenced(
@@ -42,6 +53,27 @@ class Player extends SpriteAnimationGroupComponent with HasGameRef {
 
     current = PlayerState.idle;
     return super.onLoad();
+  }
+
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollision(intersectionPoints, other);
+    if (other is Box) {
+      if (intersectionPoints.length == 2) {
+        // Calculate the collision normal and separation distance.
+        final mid = (intersectionPoints.elementAt(0) +
+                intersectionPoints.elementAt(1)) /
+            2;
+
+        final collisionNormal = absoluteCenter - mid;
+        final separationDistance = (size.x / 2) - collisionNormal.length;
+        collisionNormal.normalize();
+
+        // Resolve collision by moving player along
+        // collision normal by separation distance.
+        position += collisionNormal.scaled(separationDistance);
+      }
+    }
   }
 
   @override
