@@ -1,7 +1,5 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame/input.dart';
-import 'package:flutter/material.dart';
 import 'package:wildlife_garden_simulator/constants.dart';
 import 'package:wildlife_garden_simulator/sprite_components/box.dart';
 
@@ -60,7 +58,6 @@ class Player extends SpriteAnimationGroupComponent
     required int amount,
     required double xLocation,
     required double yLocation,
-    bool loop = true,
   }) async {
     double playerWidth = 32;
     double playerHeight = 32;

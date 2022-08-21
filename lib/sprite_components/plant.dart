@@ -53,8 +53,8 @@ class Plant extends Box {
       ],
       position: position,
       currentStage: currentStage,
-      harvestValue: 5,
-      spoilValue: -2,
+      harvestValue: 1,
+      spoilValue: 0,
     );
   }
 
@@ -91,8 +91,8 @@ class Plant extends Box {
       ],
       position: position,
       currentStage: currentStage,
-      harvestValue: 1,
-      spoilValue: 0,
+      harvestValue: 5,
+      spoilValue: -2,
     );
   }
 

@@ -1,13 +1,9 @@
-import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/services.dart';
-import 'package:flame/palette.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
-import 'package:mini_sprite/mini_sprite.dart';
-import 'package:flame_mini_sprite/flame_mini_sprite.dart';
 import 'package:wildlife_garden_simulator/constants.dart';
 import 'package:wildlife_garden_simulator/splash_screen/tutorial.dart';
 import 'package:wildlife_garden_simulator/sprite_components/box.dart';
