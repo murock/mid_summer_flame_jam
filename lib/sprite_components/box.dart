@@ -31,7 +31,7 @@ class Box extends SpriteComponent with Tappable, HasGameRef<MainGame> {
   Future<void>? onLoad() async {
     sprite = Sprite(await Flame.images.load('static/$imagePath'));
 
-    RectangleHitbox hitbox = RectangleHitbox();
+    CircleHitbox hitbox = CircleHitbox();
     hitbox.collisionType = CollisionType.passive;
 
     add(hitbox);

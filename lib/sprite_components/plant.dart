@@ -10,9 +10,14 @@ class Plant extends Box {
     super.position,
     required this.imagePaths,
     int currentStage = 0,
+    required this.harvestValue,
+    required this.spoilValue,
   }) {
     this.currentStage = currentStage;
   }
+
+  final int harvestValue;
+  final int spoilValue;
 
   factory Plant.carrot({
     required Vector2 position,
@@ -28,6 +33,8 @@ class Plant extends Box {
       ],
       position: position,
       currentStage: currentStage,
+      harvestValue: 10,
+      spoilValue: -5,
     );
   }
 
@@ -45,6 +52,8 @@ class Plant extends Box {
       ],
       position: position,
       currentStage: currentStage,
+      harvestValue: 5,
+      spoilValue: -2,
     );
   }
 
@@ -62,6 +71,8 @@ class Plant extends Box {
       ],
       position: position,
       currentStage: currentStage,
+      harvestValue: 3,
+      spoilValue: -1,
     );
   }
 
@@ -79,6 +90,8 @@ class Plant extends Box {
       ],
       position: position,
       currentStage: currentStage,
+      harvestValue: 1,
+      spoilValue: 0,
     );
   }
 
@@ -90,7 +103,7 @@ class Plant extends Box {
   @override
   void interact() {
     if (currentStage + 1 == imagePaths.length) {
-      gameRef.updateScore(10);
+      gameRef.updateScore(harvestValue);
       currentStage = 0;
       setSprite();
       growthTimer.reset();
@@ -116,6 +129,7 @@ class Plant extends Box {
           currentStage++;
         } else {
           currentStage = 0;
+          gameRef.updateScore(spoilValue);
         }
         sprite = Sprite(
             await Flame.images.load('static/${imagePaths[currentStage]}'));
