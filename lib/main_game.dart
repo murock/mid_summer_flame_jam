@@ -39,8 +39,8 @@ class MainGame extends FlameGame
 
   @override
   Future<void>? onLoad() async {
-    // FlameAudio.bgm.initialize();
-    // FlameAudio.bgm.play('music.mp3');
+    FlameAudio.bgm.initialize();
+    FlameAudio.bgm.play('music.mp3');
 
     camera.viewport = FixedResolutionViewport(Vector2(
       Constants.resolutionX,
@@ -56,7 +56,7 @@ class MainGame extends FlameGame
     _scoreText.x = Constants.resolutionX / 2;
     _scoreText.y = _scoreText.height;
 
-    gameTimer = Timer(10, onTick: gameOver);
+    gameTimer = Timer(60, onTick: gameOver);
 
     showIntro();
     //  SetupGame();

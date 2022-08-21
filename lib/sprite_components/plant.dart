@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:wildlife_garden_simulator/sprite_components/box.dart';
 
 class Plant extends Box {
@@ -103,6 +104,7 @@ class Plant extends Box {
   @override
   void interact() {
     if (currentStage + 1 == imagePaths.length) {
+      FlameAudio.play('pop.mp3');
       gameRef.updateScore(harvestValue);
       currentStage = 0;
       setSprite();
