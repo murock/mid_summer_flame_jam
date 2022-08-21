@@ -9,114 +9,19 @@ import 'package:mini_sprite/mini_sprite.dart';
 import 'package:flame_mini_sprite/flame_mini_sprite.dart';
 import 'package:wildlife_garden_simulator/constants.dart';
 import 'package:wildlife_garden_simulator/sprite_components/box.dart';
+import 'package:wildlife_garden_simulator/sprite_components/plant.dart';
 import 'package:wildlife_garden_simulator/sprite_components/player.dart';
 
-class Grid extends Component {
-  List<List<RectangleComponent>> gridTable = [];
-
-  @override
-  Future<void>? onLoad() async {
-    final miniLibrary = MiniSprite.fromDataString(grid);
-    for (var i = 0; i < miniLibrary.pixels.length; i++) {
-      List<RectangleComponent> lineRectangles = [];
-      for (var j = 0; j < miniLibrary.pixels[i].length; j++) {
-        var color = Colors.white;
-        if (miniLibrary.pixels[i][j] == false) {
-          color = Colors.black;
-        }
-        if (miniLibrary.pixels[i][j] == true) {
-          color = Colors.white;
-        }
-        final rectangleComponent = RectangleComponent(
-          position: Vector2((32 * j).toDouble(), (32 * i).toDouble()),
-          size: Vector2.all(31.0),
-          paint: Paint()..color = color,
-        );
-        lineRectangles.add(rectangleComponent);
-        add(rectangleComponent);
-      }
-      gridTable.add(lineRectangles);
-    }
-  }
-
-  Future<void>? changeColor(Color color) async {
-    for (var i = 0; i < gridTable.length; i++) {
-      for (var j = 0; j < gridTable[i].length; j++) {
-        if (gridTable[i][j].paint.color != Colors.black) {
-          final rectangleComponent = RectangleComponent(
-            position: Vector2((32 * j).toDouble(), (32 * i).toDouble()),
-            size: Vector2.all(31.0),
-            paint: Paint()..color = color,
-          );
-          add(rectangleComponent);
-        }
-      }
-    }
-  }
-}
-
-class Flower extends Component {
-  // TODO:
-  //  -  draw the
-  //  -  load a constant in contants
-  //
-}
-
-class Seed extends Component {
-  // TODO: load a constant in contants
-}
-
 class MainGame extends FlameGame
-    with
-        MouseMovementDetector,
-        HasCollisionDetection,
-        KeyboardEvents,
-        HasTappables {
+    with HasCollisionDetection, KeyboardEvents, HasTappables {
   late final Player player;
   late final Box box;
-  late final Grid grid;
+  late TextComponent _scoreText;
 
-//delete later
-  bool stopMoving = false;
+  int score = 0;
 
-  KeyEventResult onKeyEvent(
-    RawKeyEvent event,
-    Set<LogicalKeyboardKey> keysPressed,
-  ) {
-    final isKeyDown = event is RawKeyDownEvent;
-
-    final isSpace = keysPressed.contains(LogicalKeyboardKey.space);
-
-    if (isSpace && isKeyDown) {
-      grid.changeColor(Colors.blue);
-      return KeyEventResult.handled;
-    }
-
-    //Movement
-    if (event.logicalKey == LogicalKeyboardKey.keyA) {
-      player.current = PlayerState.left;
-      //   velocity.x = isKeyDown ? -1 : 0;
-    } else if (event.logicalKey == LogicalKeyboardKey.keyD) {
-      player.current = PlayerState.right;
-      //   velocity.x = isKeyDown ? 1 : 0;
-    } else if (event.logicalKey == LogicalKeyboardKey.keyW) {
-      player.current = PlayerState.up;
-      //  velocity.y = isKeyDown ? -1 : 0;
-    } else if (event.logicalKey == LogicalKeyboardKey.keyS) {
-      player.current = PlayerState.down;
-      //  velocity.y = isKeyDown ? 1 : 0;
-    }
-
-    // test code delete later
-    final isX = keysPressed.contains(LogicalKeyboardKey.keyX);
-    if (isX && isKeyDown) {
-      stopMoving = true;
-    } else {
-      stopMoving = false;
-    }
-
-    return KeyEventResult.ignored;
-  }
+  final Vector2 velocity = Vector2(0, 0);
+  static const int speed = 300;
 
   @override
   Future<void>? onLoad() async {
@@ -124,23 +29,155 @@ class MainGame extends FlameGame
       Constants.resolutionX,
       Constants.resolutionY,
     ));
-    grid = Grid();
-    add(grid);
+
+    _scoreText = TextComponent(text: score.toString());
+    _scoreText.x = Constants.resolutionX / 2;
+    _scoreText.y = _scoreText.height;
+    add(_scoreText);
+
     player = Player(
       position: size / 2,
       size: Vector2.all(100),
     );
     add(player);
-    box = Box(
-      position: size / 4,
-      size: Vector2.all(100),
+    // Carrots
+    Plant plant1 = Plant.carrot(
+      position: Vector2(100, 50),
+      currentStage: 0,
+    );
+    Plant plant2 = Plant.carrot(
+      position: Vector2(200, 50),
+      currentStage: 1,
+    );
+    Plant plant3 = Plant.carrot(
+      position: Vector2(300, 50),
+      currentStage: 2,
+    );
+    Plant plant4 = Plant.carrot(
+      position: Vector2(400, 50),
+      currentStage: 3,
     );
 
-    add(box);
+    add(plant1);
+    add(plant2);
+    add(plant3);
+    add(plant4);
+
+    // Potatos
+    Plant potato1 = Plant.potato(
+      position: Vector2(100, 450),
+      currentStage: 0,
+    );
+    Plant potato2 = Plant.potato(
+      position: Vector2(200, 450),
+      currentStage: 1,
+    );
+    Plant potato3 = Plant.potato(
+      position: Vector2(300, 450),
+      currentStage: 2,
+    );
+    Plant potato4 = Plant.potato(
+      position: Vector2(400, 450),
+      currentStage: 3,
+    );
+    add(potato1);
+    add(potato2);
+    add(potato3);
+    add(potato4);
+
+    //Sunflowers
+    Plant sun1 = Plant.sun(
+      position: Vector2(1500, 250),
+      currentStage: 0,
+    );
+    Plant sun2 = Plant.sun(
+      position: Vector2(1200, 250),
+      currentStage: 1,
+    );
+    Plant sun3 = Plant.sun(
+      position: Vector2(1300, 250),
+      currentStage: 2,
+    );
+    Plant sun4 = Plant.sun(
+      position: Vector2(1400, 250),
+      currentStage: 3,
+    );
+    add(sun1);
+    add(sun2);
+    add(sun3);
+    add(sun4);
+
+    // Tulips
+    Plant tulip1 = Plant.tulip(
+      position: Vector2(1500, 450),
+      currentStage: 0,
+    );
+    Plant tulip2 = Plant.tulip(
+      position: Vector2(1200, 450),
+      currentStage: 1,
+    );
+    Plant tulip3 = Plant.tulip(
+      position: Vector2(1300, 450),
+      currentStage: 2,
+    );
+    Plant tulip4 = Plant.tulip(
+      position: Vector2(1400, 450),
+      currentStage: 3,
+    );
+    add(tulip1);
+    add(tulip2);
+    add(tulip3);
+    add(tulip4);
+  }
+
+  void updateScore(int amount) {
+    score += amount;
+    _scoreText.text = score.toString();
+  }
+
+  KeyEventResult onKeyEvent(
+    RawKeyEvent event,
+    Set<LogicalKeyboardKey> keysPressed,
+  ) {
+    final isKeyDown = event is RawKeyDownEvent;
+
+    final isKeyUp = event is RawKeyUpEvent;
+    if (isKeyUp) {
+      player.current = PlayerState.idle;
+      velocity.x = 0;
+      velocity.y = 0;
+      return KeyEventResult.handled;
+    }
+
+    //Movement
+    if (event.logicalKey == LogicalKeyboardKey.keyA) {
+      player.current = PlayerState.left;
+      player.faceLeft();
+      velocity.x = isKeyDown ? -1 : 0;
+      return KeyEventResult.handled;
+    } else if (event.logicalKey == LogicalKeyboardKey.keyD) {
+      player.current = PlayerState.right;
+      player.faceRight();
+      velocity.x = isKeyDown ? 1 : 0;
+      return KeyEventResult.handled;
+    } else if (event.logicalKey == LogicalKeyboardKey.keyW) {
+      player.current = PlayerState.up;
+      velocity.y = isKeyDown ? -1 : 0;
+      return KeyEventResult.handled;
+    } else if (event.logicalKey == LogicalKeyboardKey.keyS) {
+      player.current = PlayerState.down;
+      velocity.y = isKeyDown ? 1 : 0;
+      return KeyEventResult.handled;
+    }
+
+    return KeyEventResult.ignored;
   }
 
   @override
-  void onMouseMove(PointerHoverInfo info) {
-    // if (!stopMoving) player.onMouseMove(info);
+  void update(double dt) {
+    super.update(dt);
+
+    final displacement = velocity * (speed * dt);
+    player.position.add(displacement);
   }
 }

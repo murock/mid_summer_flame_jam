@@ -15,36 +15,13 @@ class Player extends SpriteAnimationGroupComponent
           anchor: Anchor.center,
         );
 
-  Vector2? target;
-
-  bool onTarget = false;
-
   static const speed = 600;
-  static final Vector2 objSize = Vector2.all(50);
-  Rect _toRect() => position.toPositionedRect(objSize);
 
-  void onMouseMove(PointerHoverInfo info) {
-    target = info.eventPosition.game;
-  }
+  bool facingRight = true;
 
   @override
   Future<void>? onLoad() async {
-    // RectangleHitbox hitbox = RectangleHitbox.relative(
-    //   Vector2.all(1),
-    //   position: Vector2.all(0),
-    //   parentSize: size,
-    // );
-    // add(hitbox);
     add(CircleHitbox());
-
-    // final idle = await gameRef.loadSpriteAnimation(
-    //   'animations/ember.png',
-    //   SpriteAnimationData.sequenced(
-    //     amount: 3,
-    //     textureSize: Vector2.all(16),
-    //     stepTime: 0.15,
-    //   ),
-    // );
 
     final idle = await _getPlayerAnimation(
       amount: 4,
@@ -70,12 +47,12 @@ class Player extends SpriteAnimationGroupComponent
     animations = {
       PlayerState.idle: idle,
       PlayerState.right: across,
-      PlayerState.left: across.reversed(),
+      PlayerState.left: across,
       PlayerState.down: down,
       PlayerState.up: up,
     };
 
-    current = PlayerState.right;
+    current = PlayerState.idle;
     return super.onLoad();
   }
 
@@ -99,9 +76,23 @@ class Player extends SpriteAnimationGroupComponent
         ),
         stepTime: 0.1,
         texturePosition: Vector2(xPos, yPos),
-        loop: loop,
+        loop: true,
       ),
     );
+  }
+
+  void faceRight() {
+    if (!facingRight) {
+      flipHorizontallyAroundCenter();
+      facingRight = true;
+    }
+  }
+
+  void faceLeft() {
+    if (facingRight) {
+      flipHorizontallyAroundCenter();
+      facingRight = false;
+    }
   }
 
   @override
@@ -127,27 +118,18 @@ class Player extends SpriteAnimationGroupComponent
 
   @override
   void update(double dt) {
-    final target = this.target;
     super.update(dt);
-    if (target != null) {
-      onTarget = _toRect().contains(target.toOffset());
 
-      if (!onTarget) {
-        final dir = (target - position).normalized();
-        position += dir * (speed * dt);
-      }
+    if (position.y < 0) {
+      position.y = 0;
+    } else if (position.y > Constants.resolutionY) {
+      position.y = Constants.resolutionY;
+    }
 
-      if (position.y < 0) {
-        position.y = 0;
-      } else if (position.y > Constants.resolutionY) {
-        position.y = Constants.resolutionY;
-      }
-
-      if (position.x < 0) {
-        position.x = 0;
-      } else if (position.x > Constants.resolutionX) {
-        position.x = Constants.resolutionX;
-      }
+    if (position.x < 0) {
+      position.x = 0;
+    } else if (position.x > Constants.resolutionX) {
+      position.x = Constants.resolutionX;
     }
   }
 }
