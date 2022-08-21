@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:wildlife_garden_simulator/constants.dart';
 import 'package:wildlife_garden_simulator/sprite_components/box.dart';
 
-enum PlayerState {
-  idle,
-}
+enum PlayerState { idle, right, left, down, up }
 
 class Player extends SpriteAnimationGroupComponent
     with CollisionCallbacks, HasGameRef {
@@ -39,21 +37,71 @@ class Player extends SpriteAnimationGroupComponent
     // add(hitbox);
     add(CircleHitbox());
 
-    final idle = await gameRef.loadSpriteAnimation(
-      'animations/ember.png',
-      SpriteAnimationData.sequenced(
-        amount: 3,
-        textureSize: Vector2.all(16),
-        stepTime: 0.15,
-      ),
+    // final idle = await gameRef.loadSpriteAnimation(
+    //   'animations/ember.png',
+    //   SpriteAnimationData.sequenced(
+    //     amount: 3,
+    //     textureSize: Vector2.all(16),
+    //     stepTime: 0.15,
+    //   ),
+    // );
+
+    final idle = await _getPlayerAnimation(
+      amount: 4,
+      xLocation: 0,
+      yLocation: 0,
+    );
+    final across = await _getPlayerAnimation(
+      amount: 8,
+      xLocation: 0,
+      yLocation: 3,
+    );
+    final down = await _getPlayerAnimation(
+      amount: 8,
+      xLocation: 0,
+      yLocation: 4,
+    );
+    final up = await _getPlayerAnimation(
+      amount: 8,
+      xLocation: 0,
+      yLocation: 5,
     );
 
     animations = {
       PlayerState.idle: idle,
+      PlayerState.right: across,
+      PlayerState.left: across.reversed(),
+      PlayerState.down: down,
+      PlayerState.up: up,
     };
 
-    current = PlayerState.idle;
+    current = PlayerState.right;
     return super.onLoad();
+  }
+
+  Future<SpriteAnimation> _getPlayerAnimation({
+    required int amount,
+    required double xLocation,
+    required double yLocation,
+    bool loop = true,
+  }) async {
+    double playerWidth = 32;
+    double playerHeight = 32;
+    double xPos = playerWidth * xLocation;
+    double yPos = playerHeight * yLocation;
+    return await SpriteAnimation.load(
+      'animations/player.png',
+      SpriteAnimationData.sequenced(
+        amount: amount,
+        textureSize: Vector2(
+          playerWidth,
+          playerHeight,
+        ),
+        stepTime: 0.1,
+        texturePosition: Vector2(xPos, yPos),
+        loop: loop,
+      ),
+    );
   }
 
   @override

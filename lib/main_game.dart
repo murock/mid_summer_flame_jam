@@ -92,6 +92,21 @@ class MainGame extends FlameGame
       return KeyEventResult.handled;
     }
 
+    //Movement
+    if (event.logicalKey == LogicalKeyboardKey.keyA) {
+      player.current = PlayerState.left;
+      //   velocity.x = isKeyDown ? -1 : 0;
+    } else if (event.logicalKey == LogicalKeyboardKey.keyD) {
+      player.current = PlayerState.right;
+      //   velocity.x = isKeyDown ? 1 : 0;
+    } else if (event.logicalKey == LogicalKeyboardKey.keyW) {
+      player.current = PlayerState.up;
+      //  velocity.y = isKeyDown ? -1 : 0;
+    } else if (event.logicalKey == LogicalKeyboardKey.keyS) {
+      player.current = PlayerState.down;
+      //  velocity.y = isKeyDown ? 1 : 0;
+    }
+
     // test code delete later
     final isX = keysPressed.contains(LogicalKeyboardKey.keyX);
     if (isX && isKeyDown) {
@@ -126,6 +141,6 @@ class MainGame extends FlameGame
 
   @override
   void onMouseMove(PointerHoverInfo info) {
-    if (!stopMoving) player.onMouseMove(info);
+    // if (!stopMoving) player.onMouseMove(info);
   }
 }
